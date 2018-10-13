@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.capgemini.demo.mapper.PaperMapper">
+<resultMap type="com.capgemini.demo.bean.Paper" id="PaperMap">
+<result column="paperid" property="id" jdbcType="INTEGER"/>
+<result column="userid" property="userid" jdbcType="INTEGER"/>
+<result column="grade" property="grade" jdbcType="INTEGER"/>
+<collection property="paperquestions" column="paperid" javaType="ArrayList"  select="com.capgemini.demo.mapper.PaperMapper.FindQuestionsByPaperid"></collection>
+
+</resultMap>
+
+
+<resultMap type="com.capgemini.demo.bean.PaperQuestion" id="PaperQuestionMap">
+<result column="id" property="id" jdbcType="INTEGER"/>
+<result column="paperid" property="paperid" jdbcType="INTEGER"/>
+<result column="questionid" property="questionid" jdbcType="INTEGER"/>
+
+<association property="question" column="questionid" select="com.capgemini.demo.mapper.QuestionMapper.FindTrueQuestionById"></association>
+</resultMap>
+<select id="CountPaper" resultType="int">
+select count(*) from e_paper;
+
+</select>
+
+<insert id="addPaper" parameterType="com.capgemini.demo.bean.Paper">
+INSERT INTO `exam`.`e_paper` (`paperid`, `userid`, `grade`) 
+VALUES
+  (#{id}, #{userid}, #{grade}) ;
+</insert>
+
+<select id="CountPaperQuestion" resultType="int">
+select count(*) from e_paper_question;
+
+</select>
+
+
+<select id="CountUserAnswer" resultType="int">
+select count(*) from e_user_answer;
+
+</select>
+
+
+<select id="FindPaperByUserId" parameterType="int" resultMap="PaperMap">
+SELECT 
+  `paperid`,
+  `userid`,
+  `grade` 
+FROM
+  `exam`.`e_paper` 
+  WHERE `userid` = #{id} ;
+ </select>
+ 
+ <select id="FindQuestionsByPaperid" parameterType="int" resultMap="PaperQuestionMap">
+ SELECT 
+  `id`,
+  `paperid`,
+  `questionid` 
+FROM
+  `exam`.`e_paper_question` 
+  WHERE `paperid` = #{id} ;
+ 
+ </select>
+
+<insert id="addPaperQuestion">
+INSERT INTO `exam`.`e_paper_question` (`id`, `paperid`, `questionid`) 
+VALUES
+  (#{pqid}, #{paperid}, #{questionid}) ;
+</insert>
+
+</mapper>

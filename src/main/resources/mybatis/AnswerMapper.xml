@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.capgemini.demo.mapper.AnswerMapper">
+<resultMap type="com.capgemini.demo.bean.Answer" id="AnswerMap">
+<result column="answerid" property="id" jdbcType="INTEGER"/>
+<result column="answer" property="answer" jdbcType="VARCHAR"/>
+<result column="istrue" property="istrue" jdbcType="INTEGER"/>
+<result column="questionid" property="questionid" jdbcType="INTEGER"/>
+</resultMap>
+
+
+
+
+<select id="FindAnswerByQuestionId" parameterType="int"  resultMap="AnswerMap">
+SELECT 
+  `answerid`,
+  `answer`,
+  `istrue`,
+  `questionid` 
+FROM
+  e_answer
+    WHERE `questionid`=#{id} ;
+  
+
+</select>
+
+<select id="FindAnswerByAnswerId" parameterType="int"  resultMap="AnswerMap">
+SELECT 
+  `answerid`,
+  `answer`,
+  `istrue`,
+  `questionid` 
+FROM
+  e_answer
+    WHERE `answerid`=#{id} ;
+  
+
+</select>
+
+<select id="FindTrueAnswerByQuestionId" parameterType="int" resultMap="AnswerMap">
+SELECT 
+  `answerid`,
+  `answer`,
+  `istrue`,
+  `questionid` 
+FROM
+  e_answer
+    WHERE `questionid`=#{id} and `istrue`=1 ;
+
+</select>
+
+<!-- <select id="FindAnswerByAnswerId" parameterType="int"  resultType="Integer">
+SELECT 
+  
+  `questionid` 
+FROM
+  e_answer
+    WHERE `answerid`=#{id} ;
+  
+
+</select> --> 
+
+
+
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.capgemini.demo.mapper.UserMapper">
+<resultMap type="com.capgemini.demo.bean.User" id="UserMap">
+<result column="userid" property="id" jdbcType="INTEGER"/>
+<result column="identity" property="identity" jdbcType="VARCHAR"/>
+</resultMap> 
+
+<resultMap type="com.capgemini.demo.bean.User" id="AllUserShow">
+<result column="userid" property="id" jdbcType="INTEGER"/>
+<result column="identity" property="identity" jdbcType="VARCHAR"/>
+<association property="paper" column="userid" select="com.capgemini.demo.mapper.PaperMapper.FindPaperByUserId"></association>
+
+</resultMap> 
+
+
+<select id="FindUserByIdentity" parameterType="String" resultType="Integer">
+SELECT 
+  `userid`,
+  `identity` 
+FROM
+  `exam`.`e_user` 
+WHERE `identity`  = #{identity} ;
+</select>
+
+<select id="FindUserByName" parameterType="String" resultMap="UserMap">
+SELECT 
+  `userid`,
+  `identity` 
+FROM
+  `exam`.`e_user` 
+WHERE `identity`  = #{identity} ;
+</select>
+
+<select id="CountUser" resultType="int">
+select count(*) from e_user;
+
+</select>
+
+<insert id="AddUser" parameterType="com.capgemini.demo.bean.User">
+INSERT INTO `exam`.`e_user` (`userid`, `identity`) 
+VALUES
+  (#{id}, #{identity}) ;
+</insert>
+
+<insert id="addUserAnswer">
+INSERT INTO `exam`.`e_user_answer` (
+  `id`,
+  `userid`,
+  `questionid`,
+  `answerid`
+) 
+VALUES
+  (
+    #{uaid},
+     #{userid},
+     #{questionid},
+     #{answerid}
+  ) ;
+
+
+</insert>
+
+<select id="FindAllUser" resultMap="AllUserShow">
+SELECT 
+  `userid`,
+  `identity` 
+FROM
+  `exam`.`e_user` 
+
+</select>
+
+
+</mapper>
